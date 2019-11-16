@@ -3,6 +3,10 @@
   (:export :tt-entails?))
 (in-package :propositional-logic)
 
+(defun tt-entails? (kb alpha)
+  (let ((symbols (capture-symbols-in kb alpha)))
+    (tt-check-all kb alpha symbols nil)))
+
 (defun model-lookup (symbol model)
   (cdr (assoc symbol model)))
 
@@ -33,10 +37,6 @@
             (rest (rest symbols)))
         (and (tt-check-all kb alpha rest (extend p t model))
              (tt-check-all kb alpha rest (extend p nil model))))))
-
-(defun tt-entails? (kb alpha)
-  (let ((symbols (capture-symbols-in kb alpha)))
-    (tt-check-all kb alpha symbols nil)))
 
 (defun capture-symbols-in (&rest sentences)
   (delete-duplicates
