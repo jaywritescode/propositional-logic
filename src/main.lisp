@@ -65,3 +65,13 @@
     ((list p op q)
      `(,(eliminate-biconditionals p) ,op ,(eliminate-biconditionals q)))
     ((list (@ _) x) x)))
+
+(defun eliminate-implications (sentence)
+  (match sentence
+    ((list p :implies q)
+     `((:not ,p) :or ,q))
+    ((list :not p)
+     `(:not ,(eliminate-implications p)))
+    ((list p op q)
+     `(,(eliminate-implications p) ,op ,(eliminate-implications q)))
+    ((list (@ _) x) x)))

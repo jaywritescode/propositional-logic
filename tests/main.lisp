@@ -21,3 +21,9 @@
     (testing "biconditional elimination"
       (ok (equal (propositional-logic::eliminate-biconditionals sentence)
                  '((b1-1 :implies (p1-2 :or p2-1)) :and ((p1-2 :or p2-1) :implies b1-1)))))))
+
+(deftest eliminate-implications
+  (let ((sentence '((b1-1 :implies (p1-2 :or p2-1)) :and ((p1-2 :or p2-1) :implies b1-1))))
+    (testing "implication elimination"
+      (ok (equal (propositional-logic::eliminate-implications sentence)
+                 '(((:not b1-1) :or (p1-2 :or p2-1)) :and ((:not (p1-2 :or p2-1)) :or b1-1)))))))
