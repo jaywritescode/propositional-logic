@@ -15,3 +15,9 @@
               (b2-1))))
     (testing "knowledge base entails the given sentence"
       (ok (tt-entails? kb '(p2-2))))))
+
+(deftest eliminate-biconditionals
+  (let ((sentence '(b1-1 :iff (p1-2 :or p2-1))))
+    (testing "biconditional elimination"
+      (ok (equal (propositional-logic::eliminate-biconditionals sentence)
+                 '((b1-1 :implies (p1-2 :or p2-1)) :and ((p1-2 :or p2-1) :implies b1-1)))))))

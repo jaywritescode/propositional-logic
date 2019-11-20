@@ -48,3 +48,20 @@
                                (capture-symbols-in (first value))
                                (capture-symbols-in (rest value))))))
            sentences :initial-value nil)))
+
+;; (defun convert-to-cnf (sentence)
+;;   (let* ((x (eliminate-biconditionals sentence))
+;;          (y (eliminate-implication x))
+;;          (z (apply-negation-to-literals y))
+;;          (w (distribute-disjunction-over-conjunction z)))
+;;     w))
+
+(defun eliminate-biconditionals (sentence)
+  (match sentence
+    ((list p :iff q)
+     `((,p :implies ,q) :and (,q :implies ,p)))
+    ((list :not p)
+     `(:not ,(eliminate-biconditionals p)))
+    ((list p op q)
+     `(,(eliminate-biconditionals p) ,op ,(eliminate-biconditionals q)))
+    ((list (@ _) x) x)))
