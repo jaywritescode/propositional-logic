@@ -4,6 +4,7 @@
 (in-package :propositional-logic)
 
 (defun tt-entails? (kb alpha)
+  "Returns t if the knowledge base kb entails the sentence alpha."
   (let ((symbols (capture-symbols-in kb alpha)))
     (tt-check-all kb alpha symbols nil)))
 
@@ -11,6 +12,7 @@
   (cdr (assoc symbol model)))
 
 (defun pl-true? (sentence model)
+  "Returns t if the given sentence is true in the given model."
   (match sentence
     ((type symbol)
      (model-lookup sentence model))
@@ -29,6 +31,7 @@
   (push (cons symbol value) model))
 
 (defun tt-check-all (kb alpha symbols model)
+  "Returns t if alpha is satisfiable, recursively iterates through all possible assignments to the model."
   (if (null symbols)
       (if (pl-true? kb model)
           (pl-true? alpha model)
@@ -39,6 +42,7 @@
              (tt-check-all kb alpha rest (extend p nil model))))))
 
 (defun capture-symbols-in (&rest sentences)
+  "Returns a list of all symbols in the given collection of sentences."
   (delete-duplicates
    (reduce #'(lambda (accumulator value)
                (cond ((null value) nil)
