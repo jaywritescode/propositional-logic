@@ -16,17 +16,12 @@
     (testing "knowledge base entails the given sentence"
       (ok (tt-entails? kb '(p2-2))))))
 
-(deftest eliminate-biconditionals
-  (let ((sentence '(a :iff (b :iff c)))
-        (expected '((a :implies ((b :implies c) :and (c :implies b)))
+(deftest test-transform-to-cnf
+  (let ((sentence '(b1-1 :iff (p1-2 :or p2-1)))
+        (expected '((((:not b1-1) :or (p1-2 :or p2-1)))
                     :and
-                    (((b :implies c) :and (c :implies b)) :implies a))))
-    (testing "biconditional elimination"
-      (ok (equal (propositional-logic::eliminate-biconditionals sentence)
-                 '((b1-1 :implies (p1-2 :or p2-1)) :and ((p1-2 :or p2-1) :implies b1-1)))))))
-
-(deftest eliminate-implications
-  (let ((sentence '((b1-1 :implies (p1-2 :or p2-1)) :and ((p1-2 :or p2-1) :implies b1-1))))
-    (testing "implication elimination"
-      (ok (equal (propositional-logic::eliminate-implications sentence)
-                 '(((:not b1-1) :or (p1-2 :or p2-1)) :and ((:not (p1-2 :or p2-1)) :or b1-1)))))))
+                    ((((:not p1-2) :or b1-1)
+                      :and ((:not p2-1) :or b1-1))))))
+    (testing "transform sentence to conjunctive normal form"
+      (ok
+       (equal expected (propositional-logic::transform-to-cnf sentence))))))
