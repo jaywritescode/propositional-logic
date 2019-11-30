@@ -65,7 +65,7 @@
      ;; implication elimination
      ((list alpha :implies beta)
       (format t "~S -> implication elimination~%" sentence)
-      `(,(transform-to-cnf `((:not ,alpha) :or ,beta))))
+      (transform-to-cnf `((:not ,alpha) :or ,beta)))
      ;; double-negation elimination
      ((list :not (list :not alpha))
       (format t "~S -> double-negation elmination~%" sentence)

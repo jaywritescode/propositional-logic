@@ -18,10 +18,10 @@
 
 (deftest test-transform-to-cnf
   (let ((sentence '(b1-1 :iff (p1-2 :or p2-1)))
-        (expected '((((:not b1-1) :or (p1-2 :or p2-1)))
+        (expected '(((:not b1-1) :or (p1-2 :or p2-1))
                     :and
-                    ((((:not p1-2) :or b1-1)
-                      :and ((:not p2-1) :or b1-1))))))
+                    (((:not p1-2) :or b1-1)
+                     :and ((:not p2-1) :or b1-1)))))
     (testing "transform sentence to conjunctive normal form"
       (ok
        (equal expected (propositional-logic::transform-to-cnf sentence))))))
