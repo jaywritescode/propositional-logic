@@ -25,3 +25,13 @@
     (testing "transform sentence to conjunctive normal form"
       (ok
        (equal expected (propositional-logic::transform-to-cnf sentence))))))
+
+(deftest test-condensed-cnf
+  (let ((sentence '(((:not b1-1) :or (p1-2 :or p2-1))
+                    :and
+                    (((:not p1-2) :or b1-1)
+                     :and ((:not p2-1) :or b1-1))))
+        (expected '(((:not b1-1) p1-2 p2-1) ((:not p1-2) b1-1) ((:not p2-1) b1-1))))
+    (testing "convert cnf tree into list of conjunctions of disjunctions"
+      (ok
+       (equal expected (propositional-logic::condensed-cnf sentence))))))

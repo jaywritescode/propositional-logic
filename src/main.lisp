@@ -107,14 +107,17 @@
    sentence))
 
 (defun condensed-cnf (sentence)
-  (labels ((condensed-cnf-or (sentence)
-             (or
-              (and (atom sentence) (list sentence))
-              (match sentence
-                ((guard (list :not p)
-                        (atom p))
-                 (list sentence))
-                ((list p :or q)
-                 (nconc (condensed-cnf-or p) (condensed-cnf-or q))))
-              (error "invalid cnf"))))
-    (condensed-cnf-or sentence)))
+  (print sentence)
+  (or
+   (and (atom sentence) (list sentence))
+   (match sentence
+     ((list :not _) (list sentence))
+     ((list p :and q)
+      (nconc (or (match p ((list _ :and _)
+                           (condensed-cnf p)))
+                 (list (condensed-cnf p)))
+             (or (match q ((list _ :and _)
+                           (condensed-cnf q)))
+                 (list (condensed-cnf q)))))
+     ((list p :or q)
+      (nconc (condensed-cnf p) (condensed-cnf q))))))
