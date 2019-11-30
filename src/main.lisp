@@ -107,7 +107,6 @@
    sentence))
 
 (defun condensed-cnf (sentence)
-  (print sentence)
   (or
    (and (atom sentence) (list sentence))
    (match sentence
