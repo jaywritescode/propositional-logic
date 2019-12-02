@@ -120,3 +120,7 @@
                  (list (condensed-cnf q)))))
      ((list p :or q)
       (nconc (condensed-cnf p) (condensed-cnf q))))))
+
+(defun complimentary-literal (literal)
+  (cond ((match literal ((list :not _))) literal)
+        (t `(:not ,literal))))
