@@ -1,6 +1,6 @@
 (defsystem "propositional-logic"
   :version "0.1.0"
-  :author ""
+  :author "jay harris"
   :license ""
   :depends-on ("trivia")
   :components ((:module "src"
@@ -10,7 +10,7 @@
   :in-order-to ((test-op (test-op "propositional-logic/tests"))))
 
 (defsystem "propositional-logic/tests"
-  :author ""
+  :author "jay harris"
   :license ""
   :depends-on ("propositional-logic"
                "rove")
