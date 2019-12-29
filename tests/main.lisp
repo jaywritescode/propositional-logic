@@ -1,37 +1,40 @@
 (in-package :cl-user)
 (defpackage propositional-logic/tests/main
   (:use :cl
-        :rove)
-  (:import-from :propositional-logic :tt-entails?))
+        :fiveam)
+  (:export #:run! #:all-tests))
 (in-package :propositional-logic/tests/main)
 
 ;; NOTE: To run this test file, execute `(asdf:test-system :propositional-logic)' in your Lisp.
 
-(deftest test-tt-entails?
-  (let ((kb '((:not p1-1)
-              (b1-1 :iff (p1-2 :or p2-1))
-              (b2-1 :iff ((p1-1 :or p2-2) :or p3-1))
-              (:not b1-1)
-              (b2-1))))
-    (testing "knowledge base entails the given sentence"
-      (ok (tt-entails? kb '(p2-2))))))
+(def-suite all-tests
+  :description "The master suite of all propositional-logic tests.")
 
-(deftest test-transform-to-cnf
-  (let ((sentence '(b1-1 :iff (p1-2 :or p2-1)))
-        (expected '(((:not b1-1) :or (p1-2 :or p2-1))
-                    :and
-                    (((:not p1-2) :or b1-1)
-                     :and ((:not p2-1) :or b1-1)))))
-    (testing "transform sentence to conjunctive normal form"
-      (ok
-       (equal expected (propositional-logic::transform-to-cnf sentence))))))
+(in-suite all-tests)
 
-(deftest test-condensed-cnf
-  (let ((sentence '(((:not b1-1) :or (p1-2 :or p2-1))
+(test tt-entails?
+  :description "Test the `tt-entails?` function."
+  (let ((kb '((:not a)
+              (b :iff (c :or d))
+              (d :iff ((a :or e) :or f))
+              (:not b)
+              (d))))
+    (is-true (propositional-logic::tt-entails? kb '(e)))))
+
+(test transform-to-cnf
+  :description "Test transforming a sentence into conjunctive normal form."
+  (let ((sentence '(a :iff (b :or c)))
+        (expected '(((:not a) :or (b :or c))
                     :and
-                    (((:not p1-2) :or b1-1)
-                     :and ((:not p2-1) :or b1-1))))
-        (expected '(((:not b1-1) p1-2 p2-1) ((:not p1-2) b1-1) ((:not p2-1) b1-1))))
-    (testing "convert cnf tree into list of conjunctions of disjunctions"
-      (ok
-       (equal expected (propositional-logic::condensed-cnf sentence))))))
+                    (((:not b) :or a)
+                     :and ((:not c) :or a)))))
+    (is-true (equal expected (propositional-logic::transform-to-cnf sentence)))))
+
+(test condensed-cnf
+  :description "Test transforming a tree of clauses into a list of conjunctions of disjunctions"
+  (let ((sentence '(((:not a) :or (b :or c))
+                    :and
+                    (((:not b) :or a)
+                     :and ((:not c) :or a))))
+        (expected '(((:not a) b c) ((:not b) a) ((:not c) a))))
+    (is-true (equal expected (propositional-logic::condensed-cnf sentence)))))

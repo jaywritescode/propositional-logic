@@ -13,9 +13,9 @@
   :author "jay harris"
   :license ""
   :depends-on ("propositional-logic"
-               "rove")
+               "fiveam")
   :components ((:module "tests"
                 :components
                 ((:file "main"))))
   :description "Test system for propositional-logic"
-  :perform (test-op (op c) (symbol-call :rove :run c)))
+  :perform (test-op (op c) (symbol-call :fiveam :run! 'propositional-logic/tests/main:all-tests)))
