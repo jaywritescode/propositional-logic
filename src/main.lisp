@@ -60,36 +60,36 @@
    (match sentence
      ;; biconditional elimination
      ((list alpha :iff beta)
-      (format t "~S -> biconditional elimination~%" sentence)
+      (format t "~%~S -> biconditional elimination" sentence)
       (transform-to-cnf `((,alpha :implies ,beta) :and (,beta :implies ,alpha))))
      ;; implication elimination
      ((list alpha :implies beta)
-      (format t "~S -> implication elimination~%" sentence)
+      (format t "~%~S -> implication elimination" sentence)
       (transform-to-cnf `((:not ,alpha) :or ,beta)))
      ;; double-negation elimination
      ((list :not (list :not alpha))
-      (format t "~S -> double-negation elmination~%" sentence)
+      (format t "~%~S -> double-negation elmination" sentence)
       (transform-to-cnf alpha))
      ;; De Morgan's laws
      ((list :not (list alpha :and beta))
-      (format t "~S -> de morgan's law (not-and)~%" sentence)
+      (format t "~%~S -> de morgan's law (not-and)" sentence)
       `((:not ,(transform-to-cnf alpha)) :or (:not ,(transform-to-cnf beta))))
      ((list :not (list alpha :or beta))
-      (format t "~S -> de morgan's law (not-or)~%" sentence)
+      (format t "~%~S -> de morgan's law (not-or)" sentence)
       (transform-to-cnf `((:not ,alpha) :and (:not ,beta))))
      ;; distributivity of disjunction over conjunction
      ((list alpha :or (list beta :and gamma))
-      (format t "~S -> distribute disjunction over conjunction (or first)~%" sentence)
+      (format t "~%~S -> distribute disjunction over conjunction (or first)" sentence)
       `(,(transform-to-cnf `(,alpha :or ,beta))
         :and
         ,(transform-to-cnf `(,alpha :or ,gamma))))
      ((list (list alpha :and beta) :or gamma)
-      (format t "~S -> distribute disjunction over conjunction (and first)~%" sentence)
+      (format t "~%~S -> distribute disjunction over conjunction (and first)" sentence)
       `(,(transform-to-cnf `(,alpha :or ,gamma))
         :and
         ,(transform-to-cnf `(,beta :or ,gamma))))
      ((list alpha :or beta)
-      (format t "~S -> clauses joined by OR~%" sentence)
+      (format t "~%~S -> clauses joined by OR" sentence)
       ;; the sub-clauses can only have :or in them
       (let* ((lhs (transform-to-cnf alpha))
              (rhs (transform-to-cnf beta))
@@ -102,7 +102,7 @@
            (setf new-sentence (transform-to-cnf new-sentence))))
         new-sentence))
      ((list alpha :and beta)
-      (format t "~S -> clauses joined by AND~%" sentence)
+      (format t "~%~S -> clauses joined by AND" sentence)
       `(,(transform-to-cnf alpha) :and ,(transform-to-cnf beta))))
    sentence))
 
