@@ -1,19 +1,22 @@
 language: common-lisp
-sudo: required
+sudo: false
+
+addons:
+  homebrew:
+    update: true
+    packages:
+      - roswell
 
 env:
+  global:
+    - PATH=~/.roswell/bin:$PATH
+    - ROSWELL_INSTALL_DIR=$HOME/.roswell
   matrix:
-    - LISP=sbcl
+    - LISP=sbcl-bin
 
 install:
-  - curl https://raw.githubusercontent.com/luismbo/cl-travis/master/install.sh | bash
+  - curl -L https://raw.githubusercontent.com/roswell/roswell/release/scripts/install-for-ci.sh | sh
+  - ros install ci-utils
 
 script:
-  - cl -l fiveam
-       -e '(setf fiveam:*debug-on-error* t
-                 fiveam:*debug-on-failure* t)'
-       -e '(setf *debugger-hook*
-                 (lambda (c h)
-                   (declare (ignore c h))
-                   (uiop:quit -1)))'
-       -e '(asdf:test-system :propositional-logic)'
+  - roswell/run-fiveam.ros -e t -l propositional-logic/tests :all-tests
