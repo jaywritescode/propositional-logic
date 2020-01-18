@@ -16,4 +16,4 @@ script:
                  (lambda (c h)
                    (declare (ignore c h))
                    (uiop:quit -1)))'
-       -e '(ql:quickload :propositional-logic/tests/main)'
+       -e '(asdf:test-system :propositional-logic)'

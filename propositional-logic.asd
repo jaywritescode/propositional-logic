@@ -18,4 +18,4 @@
                 :components
                 ((:file "main"))))
   :description "Test system for propositional-logic"
-  :perform (test-op (op c) (symbol-call :fiveam :run! 'propositional-logic/tests/main:all-tests)))
+  :perform (test-op (op c) (symbol-call :fiveam :run! 'propositional-logic/tests:all-tests)))

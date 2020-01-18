@@ -1,9 +1,8 @@
-(in-package :cl-user)
-(defpackage propositional-logic/tests/main
+(defpackage propositional-logic/tests
   (:use :cl
         :fiveam)
   (:export #:run! #:all-tests))
-(in-package :propositional-logic/tests/main)
+(in-package :propositional-logic/tests)
 
 ;; NOTE: To run this test file, execute `(asdf:test-system :propositional-logic)' in your Lisp.
 
